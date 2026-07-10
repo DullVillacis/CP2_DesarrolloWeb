@@ -597,3 +597,242 @@ h3 {
     display: none;
   }
 }
+
+.pagina-titulo {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+}
+.pagina-sub {
+  color: var(--tinta-suave);
+  margin-bottom: 26px;
+}
+.pagina-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.contenedor-angosto {
+  max-width: 620px;
+}
+
+.filtros {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 18px 20px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+}
+.filtros .campo {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 150px;
+}
+
+.ofertas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
+}
+.oferta-card {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sombra-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.oferta-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra);
+}
+.oferta-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.badge {
+  background: rgba(18, 184, 134, 0.12);
+  color: var(--verde-2);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radio-full);
+}
+.estado {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.estado-ok {
+  color: var(--verde-2);
+}
+.estado-agotado {
+  color: var(--coral-2);
+}
+.oferta-titulo {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+}
+.oferta-desc {
+  color: var(--tinta-suave);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+.oferta-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tinta-suave);
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+.oferta-precio {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+.precio-original {
+  color: var(--tinta-suave);
+  text-decoration: line-through;
+  font-size: 0.95rem;
+}
+.precio-actual {
+  color: var(--verde-2);
+  font-weight: 800;
+  font-size: 1.5rem;
+  font-family: var(--fuente-display);
+}
+.oferta-acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--tinta-suave);
+}
+.empty-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: var(--crema-2);
+  color: var(--verde-2);
+  margin-bottom: 16px;
+}
+.empty-state h3 {
+  font-size: 1.3rem;
+  margin-bottom: 6px;
+  color: var(--tinta);
+}
+
+.reservas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.reserva-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 20px 24px;
+  flex-wrap: wrap;
+}
+.reserva-info h3 {
+  font-size: 1.1rem;
+  margin: 6px 0 4px;
+}
+.reserva-meta {
+  color: var(--tinta-suave);
+  font-size: 0.88rem;
+}
+.reserva-lado {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.estado-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radio-full);
+}
+.estado-pendiente {
+  background: rgba(255, 197, 61, 0.2);
+  color: #a67908;
+}
+.estado-completada {
+  background: rgba(18, 184, 134, 0.14);
+  color: var(--verde-2);
+}
+.estado-cancelada {
+  background: rgba(250, 82, 82, 0.14);
+  color: var(--error);
+}
+.reserva-codigo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 16px;
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+}
+.reserva-codigo span {
+  font-size: 0.7rem;
+  color: var(--tinta-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.reserva-codigo strong {
+  font-size: 1.05rem;
+  color: var(--verde-2);
+  letter-spacing: 0.05em;
+}
+
+.form-tarjeta {
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-lg);
+  padding: 28px;
+  box-shadow: var(--sombra-sm);
+}
+.form-fila {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+@media (max-width: 620px) {
+  .form-fila {
+    grid-template-columns: 1fr;
+  }
+  .reserva-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

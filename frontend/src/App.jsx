@@ -5,6 +5,11 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Offers from "./pages/Offers";
+import MyOffers from "./pages/MyOffers";
+import OfferForm from "./pages/OfferForm";
+import MyReservations from "./pages/MyReservations";
+import LocalReservations from "./pages/LocalReservations";
 
 function App() {
   return (
@@ -14,6 +19,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
           <Route
             path="/dashboard"
             element={
@@ -22,6 +28,57 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/ofertas"
+            element={
+              <ProtectedRoute roles={["consumidor"]}>
+                <Offers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mis-reservas"
+            element={
+              <ProtectedRoute roles={["consumidor"]}>
+                <MyReservations />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/mis-ofertas"
+            element={
+              <ProtectedRoute roles={["local"]}>
+                <MyOffers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mis-ofertas/nueva"
+            element={
+              <ProtectedRoute roles={["local"]}>
+                <OfferForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mis-ofertas/:id/editar"
+            element={
+              <ProtectedRoute roles={["local"]}>
+                <OfferForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reservas-local"
+            element={
+              <ProtectedRoute roles={["local"]}>
+                <LocalReservations />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

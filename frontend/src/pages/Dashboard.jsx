@@ -40,7 +40,7 @@ const Dashboard = () => {
                 <h3>Mis ofertas</h3>
                 <p>Crea, edita y administra tus packs de comida.</p>
               </Link>
-              <Link to="/mis-ofertas" className="accion-card">
+              <Link to="/reservas-local" className="accion-card">
                 <span className="icono-circulo icono-circulo--coral">
                   <Ticket size={26} />
                 </span>

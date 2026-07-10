@@ -27,7 +27,12 @@ const Navbar = () => {
                 <Link to="/mis-reservas">Mis reservas</Link>
               </>
             )}
-            {usuario.rol === "local" && <Link to="/mis-ofertas">Mis ofertas</Link>}
+            {usuario.rol === "local" && (
+              <>
+                <Link to="/mis-ofertas">Mis ofertas</Link>
+                <Link to="/reservas-local">Reservas</Link>
+              </>
+            )}
             <Link to="/dashboard">Panel</Link>
             <span className="navbar-user">
               Hola, {usuario.nombre.split(" ")[0]}
