@@ -1,0 +1,50 @@
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+
+const userSchema = new mongoose.Schema(
+  {
+    nombre: {
+      type: String,
+      required: [true, "El nombre es obligatorio"],
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, "El email es obligatorio"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: [true, "La contraseña es obligatoria"],
+      minlength: [6, "La contraseña debe tener al menos 6 caracteres"],
+    },
+    rol: {
+      type: String,
+      enum: ["local", "consumidor"],
+      required: [true, "El rol es obligatorio"],
+    },
+    // Campos que solo aplican cuando el rol es "local"
+    nombreNegocio: { type: String, trim: true },
+    direccion: { type: String, trim: true },
+    telefono: { type: String, trim: true },
+  },
+  { timestamps: true } // agrega createdAt y updatedAt automáticamente
+);
+
+// Antes de guardar, encriptamos la contraseña (nunca se guarda en texto plano)
+userSchema.pre("save", async function (next) {
+  // Solo la volvemos a encriptar si cambió o es nueva
+  if (!this.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// Método para comparar la contraseña ingresada en el login con la encriptada
+userSchema.methods.compararPassword = async function (passwordIngresada) {
+  return await bcrypt.compare(passwordIngresada, this.password);
+};
+
+module.exports = mongoose.model("User", userSchema);
