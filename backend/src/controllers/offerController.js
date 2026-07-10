@@ -1,11 +1,10 @@
 const Offer = require("../models/Offer");
 
-// POST /api/offers  -> Crear una oferta (solo rol local)
 const crearOferta = async (req, res) => {
   try {
     const oferta = await Offer.create({
       ...req.body,
-      local: req.usuario._id, // el dueño es el usuario autenticado
+      local: req.usuario._id,
     });
     res.status(201).json(oferta);
   } catch (error) {
@@ -15,7 +14,6 @@ const crearOferta = async (req, res) => {
   }
 };
 
-// GET /api/offers  -> Listar ofertas con filtros opcionales (categoría, precio, estado)
 const obtenerOfertas = async (req, res) => {
   try {
     const { categoria, precioMax, estado } = req.query;
@@ -37,7 +35,6 @@ const obtenerOfertas = async (req, res) => {
   }
 };
 
-// GET /api/offers/mias  -> Ofertas del local autenticado (para su panel)
 const obtenerMisOfertas = async (req, res) => {
   try {
     const ofertas = await Offer.find({ local: req.usuario._id }).sort({
@@ -51,7 +48,6 @@ const obtenerMisOfertas = async (req, res) => {
   }
 };
 
-// GET /api/offers/:id  -> Detalle de una oferta
 const obtenerOfertaPorId = async (req, res) => {
   try {
     const oferta = await Offer.findById(req.params.id).populate(
@@ -69,7 +65,6 @@ const obtenerOfertaPorId = async (req, res) => {
   }
 };
 
-// PUT /api/offers/:id  -> Actualizar (solo el local dueño)
 const actualizarOferta = async (req, res) => {
   try {
     const oferta = await Offer.findById(req.params.id);
@@ -77,7 +72,6 @@ const actualizarOferta = async (req, res) => {
       return res.status(404).json({ mensaje: "Oferta no encontrada" });
     }
 
-    // Solo el dueño puede modificarla
     if (oferta.local.toString() !== req.usuario._id.toString()) {
       return res
         .status(403)
@@ -85,8 +79,8 @@ const actualizarOferta = async (req, res) => {
     }
 
     const actualizada = await Offer.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // devuelve el documento ya actualizado
-      runValidators: true, // aplica las validaciones del modelo
+      new: true,
+      runValidators: true,
     });
     res.json(actualizada);
   } catch (error) {
@@ -96,7 +90,6 @@ const actualizarOferta = async (req, res) => {
   }
 };
 
-// DELETE /api/offers/:id  -> Eliminar (solo el local dueño)
 const eliminarOferta = async (req, res) => {
   try {
     const oferta = await Offer.findById(req.params.id);

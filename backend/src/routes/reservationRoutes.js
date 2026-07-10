@@ -12,10 +12,8 @@ const { proteger, permitirRoles } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Todas las rutas de reservas requieren estar autenticado
 router.use(proteger);
 
-// --- Acciones del CONSUMIDOR ---
 router.post(
   "/",
   permitirRoles("consumidor"),
@@ -32,7 +30,6 @@ router.post(
 router.get("/mias", permitirRoles("consumidor"), misReservas);
 router.put("/:id/cancelar", permitirRoles("consumidor"), cancelarReserva);
 
-// --- Acciones del LOCAL ---
 router.get("/local", permitirRoles("local"), reservasDeMiLocal);
 router.put("/:id/completar", permitirRoles("local"), completarReserva);
 

@@ -25,24 +25,20 @@ const userSchema = new mongoose.Schema(
       enum: ["local", "consumidor"],
       required: [true, "El rol es obligatorio"],
     },
-    // Campos que solo aplican cuando el rol es "local"
     nombreNegocio: { type: String, trim: true },
     direccion: { type: String, trim: true },
     telefono: { type: String, trim: true },
   },
-  { timestamps: true } // agrega createdAt y updatedAt automáticamente
+  { timestamps: true }
 );
 
-// Antes de guardar, encriptamos la contraseña (nunca se guarda en texto plano)
 userSchema.pre("save", async function (next) {
-  // Solo la volvemos a encriptar si cambió o es nueva
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
-// Método para comparar la contraseña ingresada en el login con la encriptada
 userSchema.methods.compararPassword = async function (passwordIngresada) {
   return await bcrypt.compare(passwordIngresada, this.password);
 };

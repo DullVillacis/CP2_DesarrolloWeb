@@ -1,7 +1,6 @@
 const Reservation = require("../models/Reservation");
 const Offer = require("../models/Offer");
 
-// Genera un código de retiro para que el consumidor lo muestre en el local
 const generarCodigoRetiro = () => {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let codigo = "";
@@ -11,7 +10,6 @@ const generarCodigoRetiro = () => {
   return `FR-${codigo}`;
 };
 
-// POST /api/reservations  -> Crear una reserva (solo consumidor)
 const crearReserva = async (req, res) => {
   try {
     const { oferta: ofertaId, cantidad } = req.body;
@@ -22,7 +20,6 @@ const crearReserva = async (req, res) => {
       return res.status(404).json({ mensaje: "Oferta no encontrada" });
     }
 
-    // Verificamos que haya stock suficiente
     if (
       oferta.estado === "agotado" ||
       oferta.cantidadDisponible < cantidadReservada
@@ -32,7 +29,6 @@ const crearReserva = async (req, res) => {
         .json({ mensaje: "No hay stock suficiente para esta oferta" });
     }
 
-    // Descontamos el stock y actualizamos el estado si se agota
     oferta.cantidadDisponible -= cantidadReservada;
     if (oferta.cantidadDisponible === 0) oferta.estado = "agotado";
     await oferta.save();
@@ -52,7 +48,6 @@ const crearReserva = async (req, res) => {
   }
 };
 
-// GET /api/reservations/mias  -> Reservas del consumidor autenticado
 const misReservas = async (req, res) => {
   try {
     const reservas = await Reservation.find({ consumidor: req.usuario._id })
@@ -70,7 +65,6 @@ const misReservas = async (req, res) => {
   }
 };
 
-// GET /api/reservations/local  -> Reservas hechas sobre las ofertas del local
 const reservasDeMiLocal = async (req, res) => {
   try {
     const misOfertas = await Offer.find({ local: req.usuario._id }).select("_id");
@@ -89,7 +83,6 @@ const reservasDeMiLocal = async (req, res) => {
   }
 };
 
-// PUT /api/reservations/:id/cancelar  -> El consumidor cancela su reserva
 const cancelarReserva = async (req, res) => {
   try {
     const reserva = await Reservation.findById(req.params.id);
@@ -111,7 +104,6 @@ const cancelarReserva = async (req, res) => {
     reserva.estado = "cancelada";
     await reserva.save();
 
-    // Devolvemos el stock a la oferta
     const oferta = await Offer.findById(reserva.oferta);
     if (oferta) {
       oferta.cantidadDisponible += reserva.cantidad;
@@ -129,7 +121,6 @@ const cancelarReserva = async (req, res) => {
   }
 };
 
-// PUT /api/reservations/:id/completar  -> El local marca la reserva como entregada
 const completarReserva = async (req, res) => {
   try {
     const reserva = await Reservation.findById(req.params.id).populate("oferta");
@@ -137,7 +128,6 @@ const completarReserva = async (req, res) => {
       return res.status(404).json({ mensaje: "Reserva no encontrada" });
     }
 
-    // Solo el local dueño de la oferta puede completarla
     if (
       !reserva.oferta ||
       reserva.oferta.local.toString() !== req.usuario._id.toString()

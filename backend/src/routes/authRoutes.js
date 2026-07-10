@@ -6,7 +6,6 @@ const { proteger } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Registro con validaciones de entrada
 router.post(
   "/register",
   [
@@ -23,7 +22,6 @@ router.post(
   registrar
 );
 
-// Login con validaciones de entrada
 router.post(
   "/login",
   [
@@ -34,7 +32,6 @@ router.post(
   login
 );
 
-// Ruta protegida: requiere token válido
 router.get("/perfil", proteger, perfil);
 
 module.exports = router;

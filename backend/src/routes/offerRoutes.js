@@ -13,7 +13,6 @@ const { proteger, permitirRoles } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Validaciones para crear una oferta
 const validarOferta = [
   body("titulo").notEmpty().withMessage("El título es obligatorio"),
   body("descripcion").notEmpty().withMessage("La descripción es obligatoria"),
@@ -44,15 +43,12 @@ const validarOferta = [
     .withMessage("La fecha de disponibilidad no es válida"),
 ];
 
-// Todas las rutas de ofertas requieren estar autenticado
 router.use(proteger);
 
-// Consultas (cualquier usuario autenticado)
 router.get("/", obtenerOfertas);
-router.get("/mias", permitirRoles("local"), obtenerMisOfertas); // antes de "/:id"
+router.get("/mias", permitirRoles("local"), obtenerMisOfertas);
 router.get("/:id", obtenerOfertaPorId);
 
-// Escritura (solo locales)
 router.post("/", permitirRoles("local"), validarOferta, validarCampos, crearOferta);
 router.put("/:id", permitirRoles("local"), actualizarOferta);
 router.delete("/:id", permitirRoles("local"), eliminarOferta);

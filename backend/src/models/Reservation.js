@@ -2,13 +2,11 @@ const mongoose = require("mongoose");
 
 const reservationSchema = new mongoose.Schema(
   {
-    // Relación: qué oferta se reservó
     oferta: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Offer",
       required: true,
     },
-    // Relación: qué consumidor hizo la reserva
     consumidor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

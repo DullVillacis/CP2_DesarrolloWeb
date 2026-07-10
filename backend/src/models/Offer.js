@@ -56,7 +56,6 @@ const offerSchema = new mongoose.Schema(
       enum: ["disponible", "agotado"],
       default: "disponible",
     },
-    // Relación: qué local (usuario) publicó esta oferta
     local: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
