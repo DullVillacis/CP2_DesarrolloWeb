@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Input from "../components/Input";
-import Select from "../components/Select";
+import Dropdown from "../components/Dropdown";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
 import { useForm } from "../hooks/useForm";
@@ -119,12 +119,13 @@ const OfferForm = () => {
             onChange={handleChange}
             required
           />
-          <Select
+          <Dropdown
             label="Categoría"
-            name="categoria"
             opciones={CATEGORIAS}
             value={values.categoria}
-            onChange={handleChange}
+            onChange={(valor) =>
+              setValues((prev) => ({ ...prev, categoria: valor }))
+            }
           />
           <div className="form-fila">
             <Input
@@ -179,7 +180,7 @@ const OfferForm = () => {
           <div className="form-acciones">
             <Button
               type="button"
-              variant="ghost"
+              variant="danger"
               onClick={() => navigate("/mis-ofertas")}
             >
               Cancelar

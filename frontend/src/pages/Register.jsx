@@ -43,7 +43,7 @@ const Register = () => {
 
   return (
     <div className="auth-pagina">
-      <div className="auth-tarjeta">
+      <div className="auth-tarjeta auth-tarjeta--ancha">
         <Link to="/" className="auth-logo">
           <Leaf size={20} /> FoodRescue
         </Link>
@@ -77,7 +77,7 @@ const Register = () => {
 
         {error && <div className="alerta alerta-error">{error}</div>}
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="auth-form-grid">
           <Input
             label="Nombre"
             name="nombre"

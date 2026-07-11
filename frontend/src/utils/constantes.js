@@ -17,3 +17,10 @@ export const ETIQUETA_ESTADO = {
   completada: "Completada",
   cancelada: "Cancelada",
 };
+
+export const OPCIONES_ESTADO_RESERVA = [
+  { valor: "", etiqueta: "Todos los estados" },
+  { valor: "pendiente", etiqueta: "Pendiente" },
+  { valor: "completada", etiqueta: "Completada" },
+  { valor: "cancelada", etiqueta: "Cancelada" },
+];

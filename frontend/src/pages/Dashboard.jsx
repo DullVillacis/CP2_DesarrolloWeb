@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Store,
@@ -8,21 +9,90 @@ import {
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
+import { listarMisOfertas, listarOfertas } from "../services/offerService";
+import {
+  listarMisReservas,
+  listarReservasDeMiLocal,
+} from "../services/reservationService";
 
 const Dashboard = () => {
   const { usuario } = useAuth();
   const esLocal = usuario.rol === "local";
+  const [conteos, setConteos] = useState({ a: null, b: null });
+
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        if (esLocal) {
+          const [ofertas, reservas] = await Promise.all([
+            listarMisOfertas(),
+            listarReservasDeMiLocal(),
+          ]);
+          setConteos({ a: ofertas.data.length, b: reservas.data.length });
+        } else {
+          const [ofertas, reservas] = await Promise.all([
+            listarOfertas({ estado: "disponible" }),
+            listarMisReservas(),
+          ]);
+          setConteos({ a: ofertas.data.length, b: reservas.data.length });
+        }
+      } catch {
+        setConteos({ a: 0, b: 0 });
+      }
+    };
+    cargar();
+  }, [esLocal]);
+
+  const cards = esLocal
+    ? [
+        {
+          to: "/mis-ofertas",
+          icono: Package,
+          titulo: "Mis ofertas",
+          texto: "Crea, edita y administra tus packs de comida.",
+          conteo: conteos.a,
+          etiqueta: "publicadas",
+        },
+        {
+          to: "/reservas-local",
+          icono: Ticket,
+          titulo: "Reservas recibidas",
+          texto: "Revisa quién reservó tus ofertas.",
+          conteo: conteos.b,
+          etiqueta: "recibidas",
+          coral: true,
+        },
+      ]
+    : [
+        {
+          to: "/ofertas",
+          icono: UtensilsCrossed,
+          titulo: "Ver ofertas",
+          texto: "Explora y filtra los packs disponibles.",
+          conteo: conteos.a,
+          etiqueta: "disponibles",
+        },
+        {
+          to: "/mis-reservas",
+          icono: Ticket,
+          titulo: "Mis reservas",
+          texto: "Consulta tus rescates y códigos de retiro.",
+          conteo: conteos.b,
+          etiqueta: "reservas",
+          coral: true,
+        },
+      ];
 
   return (
     <>
       <Navbar />
-      <div className="contenedor">
+      <div className="contenedor dashboard-pagina">
         <div className="dashboard-cabecera">
           <span className={`chip chip-${esLocal ? "coral" : "verde"}`}>
             {esLocal ? <Store size={15} /> : <ShoppingBag size={15} />}
             {esLocal ? "Local" : "Consumidor"}
           </span>
-          <h1>Hola, {usuario.nombre.split(" ")[0]}</h1>
+          <h1>¡Hola de nuevo, {usuario.nombre.split(" ")[0]}!</h1>
           <p className="dashboard-sub">
             {esLocal
               ? "Gestiona tus ofertas y ayuda a reducir el desperdicio de comida."
@@ -31,41 +101,21 @@ const Dashboard = () => {
         </div>
 
         <div className="acciones-grid">
-          {esLocal ? (
-            <>
-              <Link to="/mis-ofertas" className="accion-card">
-                <span className="icono-circulo">
-                  <Package size={26} />
-                </span>
-                <h3>Mis ofertas</h3>
-                <p>Crea, edita y administra tus packs de comida.</p>
-              </Link>
-              <Link to="/reservas-local" className="accion-card">
-                <span className="icono-circulo icono-circulo--coral">
-                  <Ticket size={26} />
-                </span>
-                <h3>Reservas recibidas</h3>
-                <p>Revisa quién reservó tus ofertas.</p>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link to="/ofertas" className="accion-card">
-                <span className="icono-circulo">
-                  <UtensilsCrossed size={26} />
-                </span>
-                <h3>Ver ofertas</h3>
-                <p>Explora y filtra los packs disponibles.</p>
-              </Link>
-              <Link to="/mis-reservas" className="accion-card">
-                <span className="icono-circulo icono-circulo--coral">
-                  <Ticket size={26} />
-                </span>
-                <h3>Mis reservas</h3>
-                <p>Consulta tus rescates y códigos de retiro.</p>
-              </Link>
-            </>
-          )}
+          {cards.map(({ to, icono: Icono, titulo, texto, conteo, etiqueta, coral }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`accion-card ${coral ? "accion-card--coral" : ""}`}
+            >
+              <Icono className="accion-card-bg" size={140} strokeWidth={1.5} />
+              <span className="accion-card-conteo">
+                {conteo === null ? "—" : conteo}
+                <small>{etiqueta}</small>
+              </span>
+              <h3>{titulo}</h3>
+              <p>{texto}</p>
+            </Link>
+          ))}
         </div>
       </div>
     </>

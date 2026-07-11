@@ -71,7 +71,7 @@ const reservasDeMiLocal = async (req, res) => {
     const ids = misOfertas.map((o) => o._id);
 
     const reservas = await Reservation.find({ oferta: { $in: ids } })
-      .populate("oferta", "titulo categoria")
+      .populate("oferta", "titulo categoria precioDescuento")
       .populate("consumidor", "nombre email")
       .sort({ createdAt: -1 });
     res.json(reservas);

@@ -4,16 +4,33 @@ import Navbar from "../components/Navbar";
 import Loader from "../components/Loader";
 import EmptyState from "../components/EmptyState";
 import Button from "../components/Button";
-import { etiquetaCategoria, ETIQUETA_ESTADO } from "../utils/constantes";
+import Dropdown from "../components/Dropdown";
+import {
+  etiquetaCategoria,
+  ETIQUETA_ESTADO,
+  OPCIONES_ESTADO_RESERVA,
+} from "../utils/constantes";
 import { formatoPrecio } from "../utils/formato";
 import {
   listarMisReservas,
   cancelarReserva,
 } from "../services/reservationService";
+import { useReservas } from "../context/ReservasContext";
 
 const MyReservations = () => {
   const [reservas, setReservas] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [estadoFiltro, setEstadoFiltro] = useState("");
+  const { refrescar } = useReservas();
+
+  const reservasFiltradas = estadoFiltro
+    ? reservas.filter((r) => r.estado === estadoFiltro)
+    : reservas;
+
+  const total = reservasFiltradas.reduce(
+    (acc, r) => acc + (r.oferta?.precioDescuento || 0) * r.cantidad,
+    0
+  );
 
   const cargar = async () => {
     setCargando(true);
@@ -33,6 +50,7 @@ const MyReservations = () => {
     if (!window.confirm("¿Cancelar esta reserva?")) return;
     await cancelarReserva(id);
     cargar();
+    refrescar();
   };
 
   if (cargando) {
@@ -58,48 +76,71 @@ const MyReservations = () => {
             texto="Explora las ofertas y rescata tu primer pack."
           />
         ) : (
-          <div className="reservas-lista">
-            {reservas.map((reserva) => (
-              <div key={reserva._id} className="reserva-card">
-                <div className="reserva-info">
-                  {reserva.oferta && (
-                    <span className="badge">
-                      {etiquetaCategoria(reserva.oferta.categoria)}
-                    </span>
-                  )}
-                  <h3>
-                    {reserva.oferta ? reserva.oferta.titulo : "Oferta eliminada"}
-                  </h3>
-                  {reserva.oferta && reserva.oferta.local && (
-                    <p className="reserva-meta">
-                      {reserva.oferta.local.nombreNegocio}
-                    </p>
-                  )}
-                  <p className="reserva-meta">
-                    Cantidad: {reserva.cantidad}
-                    {reserva.oferta &&
-                      ` · ${formatoPrecio(reserva.oferta.precioDescuento)}`}
-                  </p>
-                </div>
-                <div className="reserva-lado">
-                  <span className={`estado-pill estado-${reserva.estado}`}>
-                    {ETIQUETA_ESTADO[reserva.estado]}
-                  </span>
-                  <div className="reserva-codigo">
-                    <span>Código</span>
-                    <strong>{reserva.codigoRetiro}</strong>
-                  </div>
-                  {reserva.estado === "pendiente" && (
-                    <Button
-                      variant="ghost"
-                      onClick={() => cancelar(reserva._id)}
-                    >
-                      Cancelar
-                    </Button>
-                  )}
-                </div>
+          <div className="reservas-hoja">
+            <div className="reservas-hoja-cabecera">
+              <Dropdown
+                label="Estado"
+                opciones={OPCIONES_ESTADO_RESERVA}
+                value={estadoFiltro}
+                onChange={setEstadoFiltro}
+              />
+              <div className="reservas-resumen">
+                <span>{reservasFiltradas.length} reservas</span>
+                <span className="reservas-total">
+                  Total <strong>{formatoPrecio(total)}</strong>
+                </span>
               </div>
-            ))}
+            </div>
+
+            {reservasFiltradas.length === 0 ? (
+              <div className="reservas-vacio">
+                No hay reservas con ese estado.
+              </div>
+            ) : (
+              reservasFiltradas.map((reserva) => (
+                <div key={reserva._id} className="reserva-fila">
+                  <div className="reserva-info">
+                    {reserva.oferta && (
+                      <span className="badge">
+                        {etiquetaCategoria(reserva.oferta.categoria)}
+                      </span>
+                    )}
+                    <h3>
+                      {reserva.oferta
+                        ? reserva.oferta.titulo
+                        : "Oferta eliminada"}
+                    </h3>
+                    {reserva.oferta && reserva.oferta.local && (
+                      <p className="reserva-meta">
+                        {reserva.oferta.local.nombreNegocio}
+                      </p>
+                    )}
+                    <p className="reserva-meta">
+                      Cantidad: {reserva.cantidad}
+                      {reserva.oferta &&
+                        ` · ${formatoPrecio(reserva.oferta.precioDescuento)}`}
+                    </p>
+                  </div>
+                  <div className="reserva-lado">
+                    <span className={`estado-pill estado-${reserva.estado}`}>
+                      {ETIQUETA_ESTADO[reserva.estado]}
+                    </span>
+                    <div className="reserva-codigo">
+                      <span>Código</span>
+                      <strong>{reserva.codigoRetiro}</strong>
+                    </div>
+                    {reserva.estado === "pendiente" && (
+                      <Button
+                        variant="danger"
+                        onClick={() => cancelar(reserva._id)}
+                      >
+                        Cancelar
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>

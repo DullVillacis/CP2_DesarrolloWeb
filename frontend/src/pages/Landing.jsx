@@ -94,6 +94,9 @@ const Landing = () => {
           Hecho con <Heart size={14} className="icono-inline" /> para reducir el
           desperdicio de comida · FoodRescue 2026
         </p>
+        <p className="footer-ds">
+          <Link to="/design-system">Sistema de diseño</Link>
+        </p>
       </footer>
     </>
   );

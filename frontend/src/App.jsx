@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
+import { ReservasProvider } from "./context/ReservasContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
@@ -10,15 +12,19 @@ import MyOffers from "./pages/MyOffers";
 import OfferForm from "./pages/OfferForm";
 import MyReservations from "./pages/MyReservations";
 import LocalReservations from "./pages/LocalReservations";
+import DesignSystem from "./pages/DesignSystem";
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <ToastProvider>
+        <ReservasProvider>
+          <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/design-system" element={<DesignSystem />} />
 
           <Route
             path="/dashboard"
@@ -80,8 +86,10 @@ function App() {
           />
 
           <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+            </Routes>
+          </BrowserRouter>
+        </ReservasProvider>
+      </ToastProvider>
     </AuthProvider>
   );
 }

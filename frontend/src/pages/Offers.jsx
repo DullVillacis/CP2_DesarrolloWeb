@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ShoppingBasket } from "lucide-react";
 import Navbar from "../components/Navbar";
 import OfferCard from "../components/OfferCard";
-import Select from "../components/Select";
+import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
@@ -10,6 +10,8 @@ import EmptyState from "../components/EmptyState";
 import { CATEGORIAS } from "../utils/constantes";
 import { listarOfertas } from "../services/offerService";
 import { crearReserva } from "../services/reservationService";
+import { useToast } from "../context/ToastContext";
+import { useReservas } from "../context/ReservasContext";
 
 const opcionesCategoria = [
   { valor: "", etiqueta: "Todas las categorías" },
@@ -20,8 +22,8 @@ const Offers = () => {
   const [ofertas, setOfertas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [filtros, setFiltros] = useState({ categoria: "", precioMax: "" });
-  const [mensaje, setMensaje] = useState("");
-  const [error, setError] = useState("");
+  const { mostrarToast } = useToast();
+  const { refrescar } = useReservas();
 
   const cargar = async () => {
     setCargando(true);
@@ -51,16 +53,21 @@ const Offers = () => {
   };
 
   const reservar = async (oferta) => {
-    setError("");
-    setMensaje("");
     try {
-      const { data } = await crearReserva({ oferta: oferta._id, cantidad: 1 });
-      setMensaje(
-        `Reservaste "${oferta.titulo}". Tu código de retiro es ${data.codigoRetiro}.`
+      await crearReserva({ oferta: oferta._id, cantidad: 1 });
+      mostrarToast(
+        <>
+          Reservado <strong>{oferta.titulo}</strong>
+        </>,
+        "exito"
       );
+      refrescar();
       cargar();
     } catch (err) {
-      setError(err.response?.data?.mensaje || "No se pudo reservar la oferta");
+      mostrarToast(
+        err.response?.data?.mensaje || "No se pudo reservar la oferta",
+        "error"
+      );
     }
   };
 
@@ -73,16 +80,14 @@ const Offers = () => {
           Rescata comida rica antes de que se desperdicie.
         </p>
 
-        {mensaje && <div className="alerta alerta-exito">{mensaje}</div>}
-        {error && <div className="alerta alerta-error">{error}</div>}
-
         <form className="filtros" onSubmit={aplicarFiltros}>
-          <Select
+          <Dropdown
             label="Categoría"
-            name="categoria"
             opciones={opcionesCategoria}
             value={filtros.categoria}
-            onChange={cambiarFiltro}
+            onChange={(valor) =>
+              setFiltros((prev) => ({ ...prev, categoria: valor }))
+            }
           />
           <Input
             label="Precio máximo"

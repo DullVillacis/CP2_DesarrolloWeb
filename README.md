@@ -253,5 +253,5 @@ Las pruebas de la API se encuentran en el archivo `FoodRescue.postman_collection
 ## Integrantes
 
 - Dulce Maria Villacis Pisco
-- (Integrante 2)
-- (Integrante 3)
+- Jaione Eneritz Cherres Cevallos
+- Ronny Isaac Arellano Urgiles

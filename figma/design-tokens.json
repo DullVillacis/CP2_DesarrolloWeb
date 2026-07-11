@@ -1,0 +1,75 @@
+{
+  "global": {
+    "color": {
+      "verde": { "value": "#12b886", "type": "color" },
+      "verde-2": { "value": "#0ca678", "type": "color" },
+      "coral": { "value": "#ff6b4a", "type": "color" },
+      "coral-2": { "value": "#f0502e", "type": "color" },
+      "mango": { "value": "#ffc53d", "type": "color" },
+      "error": { "value": "#fa5252", "type": "color" },
+      "tinta": { "value": "#1b2a2f", "type": "color" },
+      "tinta-suave": { "value": "#5b6b70", "type": "color" },
+      "crema": { "value": "#fff9f2", "type": "color" },
+      "crema-2": { "value": "#fff1e6", "type": "color" },
+      "borde": { "value": "#efe6da", "type": "color" },
+      "blanco": { "value": "#ffffff", "type": "color" }
+    },
+    "gradient": {
+      "verde": {
+        "value": "linear-gradient(135deg, #12b886, #0ca678)",
+        "type": "other"
+      },
+      "coral": {
+        "value": "linear-gradient(135deg, #ff6b4a, #ffc53d)",
+        "type": "other"
+      }
+    },
+    "radius": {
+      "sm": { "value": "10", "type": "borderRadius" },
+      "base": { "value": "16", "type": "borderRadius" },
+      "lg": { "value": "26", "type": "borderRadius" },
+      "full": { "value": "999", "type": "borderRadius" }
+    },
+    "fontFamilies": {
+      "display": { "value": "Fraunces", "type": "fontFamilies" },
+      "texto": { "value": "Poppins", "type": "fontFamilies" }
+    },
+    "fontSizes": {
+      "titulo": { "value": "35", "type": "fontSizes" },
+      "seccion": { "value": "27", "type": "fontSizes" },
+      "subtitulo": { "value": "19", "type": "fontSizes" },
+      "cuerpo": { "value": "16", "type": "fontSizes" },
+      "pequeno": { "value": "14", "type": "fontSizes" }
+    },
+    "fontWeights": {
+      "regular": { "value": "400", "type": "fontWeights" },
+      "medium": { "value": "500", "type": "fontWeights" },
+      "semibold": { "value": "600", "type": "fontWeights" },
+      "bold": { "value": "700", "type": "fontWeights" },
+      "extrabold": { "value": "800", "type": "fontWeights" }
+    },
+    "boxShadow": {
+      "sm": {
+        "value": {
+          "x": "0", "y": "2", "blur": "10", "spread": "0",
+          "color": "rgba(27,42,47,0.06)", "type": "dropShadow"
+        },
+        "type": "boxShadow"
+      },
+      "base": {
+        "value": {
+          "x": "0", "y": "10", "blur": "30", "spread": "0",
+          "color": "rgba(27,42,47,0.10)", "type": "dropShadow"
+        },
+        "type": "boxShadow"
+      },
+      "lg": {
+        "value": {
+          "x": "0", "y": "20", "blur": "50", "spread": "0",
+          "color": "rgba(27,42,47,0.15)", "type": "dropShadow"
+        },
+        "type": "boxShadow"
+      }
+    }
+  }
+}
