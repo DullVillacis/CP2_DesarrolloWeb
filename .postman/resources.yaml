@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: b0fd4f9f-e6d7-4147-8852-d7420acfba71
+
+localResources:
+  collections:
+    - ../FoodRescue.postman_collection.json

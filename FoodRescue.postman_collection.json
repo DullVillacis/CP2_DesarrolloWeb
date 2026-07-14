@@ -7,7 +7,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:5000/api"
+      "value": "http://localhost:4000/api"
     },
     {
       "key": "tokenLocal",
@@ -27,6 +27,28 @@
     }
   ],
   "item": [
+    {
+      "name": "0. Conexion",
+      "item": [
+        {
+          "name": "Health check (sin token)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Verifica que el servidor Express esta corriendo y conectado. No requiere autenticacion."
+          }
+        }
+      ]
+    },
     {
       "name": "Auth",
       "item": [
@@ -191,7 +213,7 @@
           }
         },
         {
-          "name": "Perfil (ruta protegida)",
+          "name": "Perfil Consumidor (esquema flexible)",
           "request": {
             "method": "GET",
             "header": [
@@ -209,7 +231,143 @@
                 "auth",
                 "perfil"
               ]
-            }
+            },
+            "description": "Comparar con 'Perfil Local': el consumidor NO tiene nombreNegocio, direccion ni telefono. Misma coleccion 'users' de MongoDB, documentos con estructura distinta (esquema no definido/flexible, a diferencia de SQL)."
+          }
+        },
+        {
+          "name": "Perfil Local (esquema flexible)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenLocal}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/perfil",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "perfil"
+              ]
+            },
+            "description": "Comparar con 'Perfil Consumidor': el local SI tiene nombreNegocio, direccion y telefono. Mismos documentos de la coleccion 'users' con campos diferentes = esquema flexible de MongoDB."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Seguridad y validaciones (demo de errores)",
+      "item": [
+        {
+          "name": "Perfil sin token (401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/perfil",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "perfil"
+              ]
+            },
+            "description": "Ruta protegida sin JWT: responde 401 No autorizado."
+          }
+        },
+        {
+          "name": "Consumidor intenta crear oferta (403)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenConsumidor}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Intento no permitido\",\n  \"descripcion\": \"Un consumidor no puede crear ofertas\",\n  \"categoria\": \"panaderia\",\n  \"precioOriginal\": 10,\n  \"precioDescuento\": 4,\n  \"cantidadDisponible\": 5,\n  \"horarioRetiro\": \"18:00 - 20:00\",\n  \"disponibleHasta\": \"2026-12-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/offers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "offers"
+              ]
+            },
+            "description": "Control de roles: solo el rol 'local' puede crear ofertas. Responde 403 Prohibido."
+          }
+        },
+        {
+          "name": "Crear oferta con datos invalidos (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tokenLocal}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"\",\n  \"descripcion\": \"Categoria y precio invalidos\",\n  \"categoria\": \"pizza\",\n  \"precioOriginal\": -5,\n  \"precioDescuento\": 4,\n  \"cantidadDisponible\": 5,\n  \"horarioRetiro\": \"18:00 - 20:00\",\n  \"disponibleHasta\": \"2026-12-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/offers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "offers"
+              ]
+            },
+            "description": "Validaciones con express-validator: titulo vacio, categoria inexistente y precio negativo. Responde 400 con la lista de errores."
+          }
+        },
+        {
+          "name": "Registro con password corta (400)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Usuario Invalido\",\n  \"email\": \"correo-no-valido\",\n  \"password\": \"123\",\n  \"rol\": \"consumidor\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Email mal formado y password menor a 6 caracteres. Responde 400 con los mensajes de validacion."
           }
         }
       ]

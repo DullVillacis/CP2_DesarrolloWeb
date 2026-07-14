@@ -131,7 +131,7 @@ Cada parte del proyecto usa un archivo `.env`. Se incluye un `.env.example` como
 **backend/.env**
 
 ```
-PORT=5000
+PORT=4000
 MONGO_URI=mongodb://localhost:27017/foodrescue
 JWT_SECRET=escribe_aqui_una_clave_secreta_larga
 JWT_EXPIRES_IN=7d
@@ -140,7 +140,7 @@ JWT_EXPIRES_IN=7d
 **frontend/.env**
 
 ```
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:4000/api
 ```
 
 ## Ejecucion
@@ -154,7 +154,7 @@ cd backend
 npm run dev
 ```
 
-El servidor queda disponible en `http://localhost:5000`.
+El servidor queda disponible en `http://localhost:4000`.
 
 Terminal 2 (frontend):
 
@@ -167,7 +167,7 @@ La aplicacion queda disponible en `http://localhost:5173`.
 
 ## API REST
 
-Base: `http://localhost:5000/api`
+Base: `http://localhost:4000/api`
 
 ### Autenticacion
 
